@@ -1,10 +1,10 @@
 package az.atl.msauth.controller.profile;
 
-import az.atl.msauth.consts.response.DeleteResponse;
-import az.atl.msauth.consts.request.UpdateAccountRequest;
-import az.atl.msauth.consts.request.UpdatePasswordRequest;
-import az.atl.msauth.consts.response.UpdateResponse;
-import az.atl.msauth.dto.AgentProfileDTO;
+import az.atl.msauth.dto.request.profile.AgentProfileRequest;
+import az.atl.msauth.dto.request.profile.UpdateAccountRequest;
+import az.atl.msauth.dto.request.profile.UpdatePasswordRequest;
+import az.atl.msauth.dto.response.message.DeleteResponse;
+import az.atl.msauth.dto.response.message.UpdateResponse;
 import az.atl.msauth.service.impl.AgentProfileServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -28,7 +28,7 @@ public class AgentProfileController {
     @Operation(summary = "User's information")
 
     @GetMapping
-    public ResponseEntity<AgentProfileDTO> myProfile() {
+    public ResponseEntity<AgentProfileRequest> myProfile() {
         return ResponseEntity.ok(userProfileService.myProfile());
     }
 
@@ -41,7 +41,7 @@ public class AgentProfileController {
 
     @Operation(summary = "Update account's password")
 
-    @PutMapping
+    @PatchMapping
     public ResponseEntity<UpdateResponse> updatePassword(
             @Valid @RequestBody UpdatePasswordRequest request
     ) {
@@ -50,7 +50,7 @@ public class AgentProfileController {
 
     @Operation(summary = "Update account's information")
 
-    @PatchMapping
+    @PutMapping
     public ResponseEntity<UpdateResponse> updateAccount(
             @Valid @RequestBody UpdateAccountRequest request
     ) {

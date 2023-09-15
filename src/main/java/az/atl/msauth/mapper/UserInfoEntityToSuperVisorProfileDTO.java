@@ -1,12 +1,12 @@
 package az.atl.msauth.mapper;
 
 import az.atl.msauth.dao.entity.UserInfoEntity;
-import az.atl.msauth.dto.SuperVisorProfileDTO;
+import az.atl.msauth.dto.request.profile.SuperVisorProfileRequest;
 
 public class UserInfoEntityToSuperVisorProfileDTO {
 
-    public static SuperVisorProfileDTO mapToSuperVisorProfileDTO(UserInfoEntity entity) {
-        return SuperVisorProfileDTO.builder()
+    public static SuperVisorProfileRequest mapToSuperVisorProfileDTO(UserInfoEntity entity) {
+        return SuperVisorProfileRequest.builder()
                 .id(entity.getId())
                 .name(entity.getName())
                 .surname(entity.getSurname())

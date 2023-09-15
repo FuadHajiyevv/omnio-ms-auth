@@ -3,7 +3,6 @@ package az.atl.msauth.validation.custom_annotations;
 import az.atl.msauth.validation.BirthDateValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
-import org.hibernate.validator.internal.constraintvalidators.bv.EmailValidator;
 
 import java.lang.annotation.*;
 

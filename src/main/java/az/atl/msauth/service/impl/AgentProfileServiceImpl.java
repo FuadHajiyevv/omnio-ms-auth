@@ -1,13 +1,13 @@
 package az.atl.msauth.service.impl;
 
-import az.atl.msauth.consts.response.DeleteResponse;
-import az.atl.msauth.consts.request.UpdateAccountRequest;
-import az.atl.msauth.consts.request.UpdatePasswordRequest;
-import az.atl.msauth.consts.response.UpdateResponse;
 import az.atl.msauth.dao.entity.UserCredentialsEntity;
 import az.atl.msauth.dao.entity.UserInfoEntity;
 import az.atl.msauth.dao.repository.UserCredentialsRepository;
-import az.atl.msauth.dto.AgentProfileDTO;
+import az.atl.msauth.dto.request.profile.AgentProfileRequest;
+import az.atl.msauth.dto.request.profile.UpdateAccountRequest;
+import az.atl.msauth.dto.request.profile.UpdatePasswordRequest;
+import az.atl.msauth.dto.response.message.DeleteResponse;
+import az.atl.msauth.dto.response.message.UpdateResponse;
 import az.atl.msauth.exceptions.EmailIsAlreadyBusyException;
 import az.atl.msauth.exceptions.PhoneNumberIsAlreadyBusyException;
 import az.atl.msauth.service.AgentProfileService;
@@ -44,12 +44,12 @@ public class AgentProfileServiceImpl implements AgentProfileService {
 
     @Transactional
     @Override
-    public AgentProfileDTO myProfile() {
+    public AgentProfileRequest myProfile() {
         Authentication contextHolder = SecurityContextHolder.getContext().getAuthentication();
         UserCredentialsEntity entity = repository.findByUsername(contextHolder.getName()).get();
         SecurityContextHolder.clearContext();
 
-        return AgentProfileDTO.builder()
+        return AgentProfileRequest.builder()
                 .name(entity.getUserInfoEntity().getName())
                 .surname(entity.getUserInfoEntity().getSurname())
                 .birthDate(entity.getUserInfoEntity().getBirthDate())

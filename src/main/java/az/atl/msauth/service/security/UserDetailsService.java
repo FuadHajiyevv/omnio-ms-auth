@@ -8,8 +8,6 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.Locale;
-
 
 @Service
 public class UserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {

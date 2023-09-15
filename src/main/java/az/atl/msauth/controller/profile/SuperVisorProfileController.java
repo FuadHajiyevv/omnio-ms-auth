@@ -1,9 +1,9 @@
 package az.atl.msauth.controller.profile;
 
-import az.atl.msauth.consts.response.DeleteResponse;
-import az.atl.msauth.consts.request.RoleUpdateRequest;
-import az.atl.msauth.consts.response.UpdateResponse;
-import az.atl.msauth.dto.SuperVisorProfileDTO;
+import az.atl.msauth.dto.request.profile.RoleUpdateRequest;
+import az.atl.msauth.dto.request.profile.SuperVisorProfileRequest;
+import az.atl.msauth.dto.response.message.DeleteResponse;
+import az.atl.msauth.dto.response.message.UpdateResponse;
 import az.atl.msauth.service.impl.SuperVisorProfileServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -31,14 +31,14 @@ public class SuperVisorProfileController {
     @Operation(summary = "Get all users list")
 
     @GetMapping
-    public ResponseEntity<List<SuperVisorProfileDTO>> getAll() {
+    public ResponseEntity<List<SuperVisorProfileRequest>> getAll() {
         return ResponseEntity.ok(service.getAll());
     }
 
     @Operation(summary = "Get user by id")
 
     @GetMapping("/{id}")
-    public ResponseEntity<SuperVisorProfileDTO> getById(
+    public ResponseEntity<SuperVisorProfileRequest> getById(
             @Min(value = 1, message = "validation.id.min") @PathVariable(name = "id") Long id
     ) {
         return ResponseEntity.ok(service.getById(id));

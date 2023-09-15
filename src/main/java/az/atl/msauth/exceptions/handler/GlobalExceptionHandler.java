@@ -1,8 +1,8 @@
 package az.atl.msauth.exceptions.handler;
 
 
-import az.atl.msauth.consts.response.exception.CustomExceptionResponse;
-import az.atl.msauth.consts.response.exception.MethodArgumentExceptionResponse;
+import az.atl.msauth.dto.response.exception.CustomExceptionResponse;
+import az.atl.msauth.dto.response.exception.MethodArgumentExceptionResponse;
 import az.atl.msauth.exceptions.*;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.Arrays;
+import java.security.SignatureException;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -82,7 +82,6 @@ public class GlobalExceptionHandler {
                         .build()
         );
     }
-
     @ExceptionHandler(PhoneNumberIsAlreadyBusyException.class)
     public ResponseEntity<CustomExceptionResponse> phoneNumberIsAlreadyBusy(PhoneNumberIsAlreadyBusyException exception) {
         return ResponseEntity.badRequest().body(
@@ -93,8 +92,8 @@ public class GlobalExceptionHandler {
         );
     }
 
-    @ExceptionHandler(TokenIsNotExpiredException.class)
-    public ResponseEntity<CustomExceptionResponse> tokenIsNotExpired(TokenIsNotExpiredException exception) {
+    @ExceptionHandler(TokenIsExpiredException.class)
+    public ResponseEntity<CustomExceptionResponse> tokenIsNotExpired(TokenIsExpiredException exception) {
         return ResponseEntity.badRequest().body(
                 CustomExceptionResponse.builder()
                         .status(HttpStatus.BAD_REQUEST.value())
@@ -144,12 +143,34 @@ public class GlobalExceptionHandler {
                         .build(),HttpStatus.NOT_FOUND);
     }
 
-//    @ExceptionHandler(AccessDeniedException.class)
-//    public ResponseEntity<CustomExceptionResponse> accessDenied(AccessDeniedException exception) {
-//        CustomExceptionResponse response = CustomExceptionResponse.builder()
-//                .status(HttpStatus.FORBIDDEN.value())
-//                .reason("Access denied: " + exception.getMessage())
-//                .build();
-//        return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
-//    }
+    @ExceptionHandler(ForbiddenFriendshipHimselfException.class)
+    public ResponseEntity<CustomExceptionResponse> friendshipsHimself(ForbiddenFriendshipHimselfException exception){
+        return new ResponseEntity<>(
+                CustomExceptionResponse.builder()
+                        .status(HttpStatus.FORBIDDEN.value())
+                        .reason(exception.getLocalizedMessage())
+                        .build(),HttpStatus.FORBIDDEN
+        );
+    }
+
+    @ExceptionHandler(TokenDoestExistsException.class)
+    public ResponseEntity<CustomExceptionResponse> friendshipsHimself(TokenDoestExistsException exception){
+        return new ResponseEntity<>(
+                CustomExceptionResponse.builder()
+                        .status(HttpStatus.NOT_FOUND.value())
+                        .reason(exception.getLocalizedMessage())
+                        .build(),HttpStatus.NOT_FOUND
+        );
+    }
+
+    @ExceptionHandler(TokenIsNotRefreshException.class)
+    public ResponseEntity<CustomExceptionResponse> isNotRefresh(TokenIsNotRefreshException exception){
+        return new ResponseEntity<>(
+                CustomExceptionResponse.builder()
+                        .status(HttpStatus.BAD_REQUEST.value())
+                        .reason(exception.getLocalizedMessage())
+                        .build(),HttpStatus.BAD_REQUEST
+        );
+    }
+
 }

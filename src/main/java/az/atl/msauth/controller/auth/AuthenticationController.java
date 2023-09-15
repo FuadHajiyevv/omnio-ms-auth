@@ -1,19 +1,17 @@
 package az.atl.msauth.controller.auth;
 
 
-import az.atl.msauth.consts.request.AuthRequest;
-import az.atl.msauth.consts.request.RefreshRequest;
-import az.atl.msauth.consts.request.RegisterRequest;
-import az.atl.msauth.consts.response.AuthResponse;
-import az.atl.msauth.consts.response.RefreshResponse;
-import az.atl.msauth.consts.response.RegisterResponse;
+import az.atl.msauth.dto.request.auth.AuthRequest;
+import az.atl.msauth.dto.request.auth.RefreshRequest;
+import az.atl.msauth.dto.request.auth.RegisterRequest;
+import az.atl.msauth.dto.response.auth.AuthResponse;
+import az.atl.msauth.dto.response.auth.RefreshResponse;
+import az.atl.msauth.dto.response.auth.RegisterResponse;
 import az.atl.msauth.service.security.AuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

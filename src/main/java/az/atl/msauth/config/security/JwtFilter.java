@@ -1,5 +1,6 @@
 package az.atl.msauth.config.security;
 
+import az.atl.msauth.dao.repository.TokenRepository;
 import az.atl.msauth.service.jwt.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -12,7 +13,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -23,9 +23,12 @@ public class JwtFilter extends OncePerRequestFilter {
     private final UserDetailsService userDetailsService;
     private final JwtService service;
 
-    public JwtFilter(UserDetailsService userDetailsService, JwtService service) {
+    private final TokenRepository tokenRepository;
+
+    public JwtFilter(UserDetailsService userDetailsService, JwtService service, TokenRepository tokenRepository) {
         this.userDetailsService = userDetailsService;
         this.service = service;
+        this.tokenRepository = tokenRepository;
     }
 
     @Override
@@ -44,7 +47,10 @@ public class JwtFilter extends OncePerRequestFilter {
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-            if (service.isValid(jwt, userDetails)) {
+            boolean isTokenValid = tokenRepository.findByToken(jwt)
+                    .map(o -> !o.getExpired() && !o.getRevoked()).orElse(false);
+
+            if (service.isValid(jwt, userDetails) && isTokenValid) {
                 if (service.checkRole(jwt, userDetails)) {
                     UsernamePasswordAuthenticationToken authenticationObject = new UsernamePasswordAuthenticationToken(
                             userDetails,

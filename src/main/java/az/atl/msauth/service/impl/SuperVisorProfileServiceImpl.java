@@ -1,12 +1,12 @@
 package az.atl.msauth.service.impl;
 
-import az.atl.msauth.consts.response.DeleteResponse;
-import az.atl.msauth.consts.request.RoleUpdateRequest;
-import az.atl.msauth.consts.response.UpdateResponse;
 import az.atl.msauth.dao.entity.UserInfoEntity;
 import az.atl.msauth.dao.entity.UserRoleEntity;
 import az.atl.msauth.dao.repository.UserInfoRepository;
-import az.atl.msauth.dto.SuperVisorProfileDTO;
+import az.atl.msauth.dto.request.profile.RoleUpdateRequest;
+import az.atl.msauth.dto.request.profile.SuperVisorProfileRequest;
+import az.atl.msauth.dto.response.message.DeleteResponse;
+import az.atl.msauth.dto.response.message.UpdateResponse;
 import az.atl.msauth.exceptions.RoleAlreadyExistsException;
 import az.atl.msauth.exceptions.UserNotFoundException;
 import az.atl.msauth.mapper.UserInfoEntityToSuperVisorProfileDTO;
@@ -19,7 +19,6 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,7 +37,7 @@ public class SuperVisorProfileServiceImpl implements SuperVisorProfileService {
 
     @Transactional
     @Override
-    public List<SuperVisorProfileDTO> getAll() {
+    public List<SuperVisorProfileRequest> getAll() {
         return repository.findAll().stream()
                 .map(
                         UserInfoEntityToSuperVisorProfileDTO::mapToSuperVisorProfileDTO
@@ -61,7 +60,7 @@ public class SuperVisorProfileServiceImpl implements SuperVisorProfileService {
 
     @Transactional
     @Override
-    public SuperVisorProfileDTO getById(Long id) {
+    public SuperVisorProfileRequest getById(Long id) {
         UserInfoEntity entity = repository.findById(id).orElseThrow(() -> new UserNotFoundException(
                 messageSource.getMessage(
                         "user_not_found",null, LocaleContextHolder.getLocale()

@@ -1,10 +1,12 @@
 package az.atl.msauth.config.security;
 
+import az.atl.msauth.service.security.LogoutService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -17,10 +19,13 @@ import static org.springframework.http.HttpMethod.*;
 public class SecurityConfig {
 
     private final AuthenticationProvider provider;
+
+    private final LogoutService logoutHandler;
     private final JwtFilter filter;
 
-    public SecurityConfig(AuthenticationProvider provider, JwtFilter filter) {
+    public SecurityConfig(AuthenticationProvider provider, LogoutService logoutHandler, JwtFilter filter) {
         this.provider = provider;
+        this.logoutHandler = logoutHandler;
         this.filter = filter;
     }
 
@@ -45,12 +50,12 @@ public class SecurityConfig {
                         ).permitAll()
 
                 .requestMatchers("/supervisor/profile/**").hasRole(SUPERVISOR.name())
-//                .requestMatchers("/supervisor/profile").hasRole(SUPERVISOR.name())
                 .requestMatchers("/agent/profile/**").hasAnyRole(AGENT.name(), SUPERVISOR.name())
-//                .requestMatchers("/agent/profile").hasAnyRole(AGENT.name(), SUPERVISOR.name())
+
+                .requestMatchers("/chat/**").hasAnyRole(AGENT.name(), SUPERVISOR.name())
+                .requestMatchers("/friendship/**").hasAnyRole(AGENT.name(), SUPERVISOR.name())
 
                 .requestMatchers(GET, "/supervisor/profile/**").hasAuthority(SUPERVISOR_READ.name())
-//                .requestMatchers(GET,"/supervisor/profile").hasAuthority(SUPERVISOR_READ.name())
                 .requestMatchers(GET, "/agent/profile/**").hasAnyAuthority(AGENT_READ.name(), SUPERVISOR_READ.name())
 
                 .requestMatchers(DELETE, "/supervisor/profile/**").hasAuthority(SUPERVISOR_DELETE.name())
@@ -59,6 +64,9 @@ public class SecurityConfig {
                 .requestMatchers(PUT, "/supervisor/profile/**").hasAuthority(SUPERVISOR_UPDATE.name())
                 .requestMatchers(PUT, "/agent/profile/**").hasAnyAuthority(AGENT_UPDATE.name(), SUPERVISOR_UPDATE.name())
 
+                .requestMatchers(POST,"/chat/**").hasAnyAuthority(AGENT.name(), SUPERVISOR.name())
+                .requestMatchers(POST,"/friendship/**").hasAnyAuthority(AGENT.name(), SUPERVISOR.name())
+
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -66,7 +74,13 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authenticationProvider(provider)
-                .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
+                .logout()
+                .logoutUrl("/auth/logout")
+                .addLogoutHandler(logoutHandler)
+                .logoutSuccessHandler(
+                        (request, response, authentication) -> SecurityContextHolder.clearContext()
+                );
         return http.build();
     }
 

@@ -1,14 +1,14 @@
 package az.atl.msauth.service;
 
-import az.atl.msauth.consts.response.DeleteResponse;
-import az.atl.msauth.consts.request.UpdateAccountRequest;
-import az.atl.msauth.consts.request.UpdatePasswordRequest;
-import az.atl.msauth.consts.response.UpdateResponse;
-import az.atl.msauth.dto.AgentProfileDTO;
+import az.atl.msauth.dto.request.profile.AgentProfileRequest;
+import az.atl.msauth.dto.request.profile.UpdateAccountRequest;
+import az.atl.msauth.dto.request.profile.UpdatePasswordRequest;
+import az.atl.msauth.dto.response.message.DeleteResponse;
+import az.atl.msauth.dto.response.message.UpdateResponse;
 
 public interface AgentProfileService {
 
-    AgentProfileDTO myProfile();
+    AgentProfileRequest myProfile();
 
     DeleteResponse deleteMyAccount();
 

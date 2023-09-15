@@ -1,5 +1,7 @@
 package az.atl.msauth.service.jwt;
 
+import az.atl.msauth.dto.request.auth.LogoutRequest;
+import az.atl.msauth.dto.response.auth.LogoutResponse;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -46,7 +48,7 @@ public class JwtService {
                 .setClaims(extraClaims)
                 .claim("roles", userDetails.getAuthorities())
                 .setSubject(userDetails.getUsername())
-                .setIssuer("security-demo")
+                .setIssuer("ms-auth")
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + accessTokenExpiration))
                 .signWith(getSecretKey(), SignatureAlgorithm.HS256)
@@ -63,7 +65,7 @@ public class JwtService {
                 .setClaims(extraClaims)
                 .claim("roles", userDetails.getAuthorities())
                 .setSubject(userDetails.getUsername())
-                .setIssuer("security-demo")
+                .setIssuer("ms-auth")
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + refreshTokenExpiration))
                 .signWith(getSecretKey(), SignatureAlgorithm.HS256)
@@ -128,5 +130,14 @@ public class JwtService {
     public boolean isValid(String jwt, UserDetails userDetails) {
         String usernameExtractFromJwt = extractClaim(jwt, Claims::getSubject);
         return usernameExtractFromJwt.equals(userDetails.getUsername()) && !isJwtExpired(jwt);
+    }
+
+    public LogoutResponse invalidateToken(LogoutRequest request) {
+        Claims allClaims = getAllClaimsFromJwt(request.getToken());
+        Date now = new Date();
+        allClaims.setExpiration(now);
+        return LogoutResponse.builder()
+                .logout(true)
+                .build();
     }
 }
