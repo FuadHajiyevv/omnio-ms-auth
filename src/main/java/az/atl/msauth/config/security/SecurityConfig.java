@@ -49,12 +49,16 @@ public class SecurityConfig {
                         "/swagger-ui.html"
                         ).permitAll()
 
+                // ROLE
                 .requestMatchers("/supervisor/profile/**").hasRole(SUPERVISOR.name())
+                .requestMatchers("/supervisor/message/**").hasRole(SUPERVISOR.name())
+
                 .requestMatchers("/agent/profile/**").hasAnyRole(AGENT.name(), SUPERVISOR.name())
+                .requestMatchers("/agent/chat/**").hasAnyRole(AGENT.name(), SUPERVISOR.name())
+                .requestMatchers("/agent/friendship/**").hasAnyRole(AGENT.name(), SUPERVISOR.name())
+                .requestMatchers("/agent/activity/**").hasAnyRole(AGENT.name(), SUPERVISOR.name())
 
-                .requestMatchers("/chat/**").hasAnyRole(AGENT.name(), SUPERVISOR.name())
-                .requestMatchers("/friendship/**").hasAnyRole(AGENT.name(), SUPERVISOR.name())
-
+                // AUTHORITY
                 .requestMatchers(GET, "/supervisor/profile/**").hasAuthority(SUPERVISOR_READ.name())
                 .requestMatchers(GET, "/agent/profile/**").hasAnyAuthority(AGENT_READ.name(), SUPERVISOR_READ.name())
 
@@ -64,8 +68,17 @@ public class SecurityConfig {
                 .requestMatchers(PUT, "/supervisor/profile/**").hasAuthority(SUPERVISOR_UPDATE.name())
                 .requestMatchers(PUT, "/agent/profile/**").hasAnyAuthority(AGENT_UPDATE.name(), SUPERVISOR_UPDATE.name())
 
-                .requestMatchers(POST,"/chat/**").hasAnyAuthority(AGENT.name(), SUPERVISOR.name())
-                .requestMatchers(POST,"/friendship/**").hasAnyAuthority(AGENT.name(), SUPERVISOR.name())
+                .requestMatchers(POST,"/agent/chat/**").hasAnyAuthority(AGENT.name(), SUPERVISOR.name())
+                .requestMatchers(GET,"/agent/chat/**").hasAnyAuthority(AGENT_READ.name(), SUPERVISOR_READ.name())
+
+                .requestMatchers(POST,"/agent/friendship/**").hasAnyAuthority(AGENT.name(), SUPERVISOR.name())
+                .requestMatchers(GET,"/agent/friendship/**").hasAnyAuthority(AGENT_READ.name(), SUPERVISOR_READ.name())
+                .requestMatchers(PATCH,"/agent/friendship/**").hasAnyAuthority(AGENT_UPDATE.name(), SUPERVISOR_UPDATE.name())
+
+                .requestMatchers(GET,"/agent/activity/**").hasAnyAuthority(AGENT_READ.name(), SUPERVISOR_READ.name())
+
+                .requestMatchers(GET,"/supervisor/message/**").hasAnyAuthority(SUPERVISOR_READ.name())
+
 
                 .anyRequest()
                 .authenticated()

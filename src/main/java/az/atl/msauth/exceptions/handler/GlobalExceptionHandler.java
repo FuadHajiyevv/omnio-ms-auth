@@ -16,6 +16,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.nio.file.AccessDeniedException;
 import java.security.SignatureException;
 import java.util.List;
 import java.util.Objects;
@@ -165,6 +166,26 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(TokenIsNotRefreshException.class)
     public ResponseEntity<CustomExceptionResponse> isNotRefresh(TokenIsNotRefreshException exception){
+        return new ResponseEntity<>(
+                CustomExceptionResponse.builder()
+                        .status(HttpStatus.BAD_REQUEST.value())
+                        .reason(exception.getLocalizedMessage())
+                        .build(),HttpStatus.BAD_REQUEST
+        );
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<CustomExceptionResponse> isNotRefresh(AccessDeniedException exception){
+        return new ResponseEntity<>(
+                CustomExceptionResponse.builder()
+                        .status(HttpStatus.BAD_REQUEST.value())
+                        .reason(exception.getLocalizedMessage())
+                        .build(),HttpStatus.BAD_REQUEST
+        );
+    }
+
+    @ExceptionHandler(RequestToHimselfException.class)
+    public ResponseEntity<CustomExceptionResponse> isNotRefresh(RequestToHimselfException exception){
         return new ResponseEntity<>(
                 CustomExceptionResponse.builder()
                         .status(HttpStatus.BAD_REQUEST.value())

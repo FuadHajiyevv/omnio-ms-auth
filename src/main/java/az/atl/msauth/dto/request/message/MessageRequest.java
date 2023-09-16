@@ -19,8 +19,8 @@ public class MessageRequest {
     @NotEmpty(message = "validation.username.not_empty")
     private String friend;
 
-    @NotBlank(message = "validation.username.not_blank")
-    @NotEmpty(message = "validation.username.not_empty")
+    @NotBlank(message = "validation.content.not_blank")
+    @NotEmpty(message = "validation.content.not_empty")
     private String content;
 
 }

@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class RoleUpdateRequest {
 
-   @NotNull(message = "validation.role.not_null")
+   @NotNull(message = "validation.role.not_blank")
+   @NotNull(message = "validation.role.not_empty")
     private Role role;
 }

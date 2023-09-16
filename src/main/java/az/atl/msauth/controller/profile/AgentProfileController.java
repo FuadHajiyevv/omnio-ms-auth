@@ -33,14 +33,12 @@ public class AgentProfileController {
     }
 
     @Operation(summary = "Delete user's account")
-
     @DeleteMapping
     public ResponseEntity<DeleteResponse> delete() {
         return ResponseEntity.ok(userProfileService.deleteMyAccount());
     }
 
     @Operation(summary = "Update account's password")
-
     @PatchMapping
     public ResponseEntity<UpdateResponse> updatePassword(
             @Valid @RequestBody UpdatePasswordRequest request
@@ -49,7 +47,6 @@ public class AgentProfileController {
     }
 
     @Operation(summary = "Update account's information")
-
     @PutMapping
     public ResponseEntity<UpdateResponse> updateAccount(
             @Valid @RequestBody UpdateAccountRequest request

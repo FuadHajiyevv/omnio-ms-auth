@@ -113,4 +113,36 @@ public interface MessageFeignClient {
             @RequestHeader(name = "Authorization")String token,
             @RequestHeader(name = "Accept-Language",required = false)String lang
     );
+
+
+    // SUPERVISOR MESSAGE CONTROLLER
+
+    @GetMapping("/supervisor/message/getMessages/{u1}/{u2}")
+    ResponseEntity<List<MessageResponse>> getMessagesByUsername(
+            @RequestHeader(name = "Authorization")String header,
+            @RequestHeader(name = "Accept-Language",required = false)String lang,
+            @PathVariable(name = "u1") String u1,
+            @PathVariable(name = "u2") String u2
+    );
+
+    @GetMapping("/supervisor/message/getChats/{username}")
+    ResponseEntity<List<ChatListResponse>> getChatsOfUserByUsername(
+            @RequestHeader(name = "Authorization")String header,
+            @RequestHeader(name = "Accept-Language",required = false)String lang,
+            @PathVariable(name = "username") String username
+    );
+
+    @GetMapping("/supervisor/message/getFriends/{username}")
+    ResponseEntity<List<FriendListResponse>> getFriendsOfUser(
+            @RequestHeader(name = "Authorization")String header,
+            @RequestHeader(name = "Accept-Language",required = false)String lang,
+            @PathVariable(name = "username") String username
+    );
+
+    @GetMapping("/supervisor/message/getActivityReport/{username}")
+    ResponseEntity<ActivityReportResponse> getActivityReport(
+            @RequestHeader(name = "Authorization")String header,
+            @RequestHeader(name = "Accept-Language",required = false)String lang,
+            @PathVariable(name = "username") String username
+    );
 }
