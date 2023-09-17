@@ -21,8 +21,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Builder
 public class UpdateAccountRequest {
-    @Min(value = 1,message = "validation.id.min")
-    private Long id;
 
     @Size(min = 2, message = "validation.name.size")
     @NotEmpty(message = "validation.name.not_empty")

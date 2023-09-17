@@ -153,7 +153,7 @@ public class AuthenticationService {
         tokenRepository.save(token);
     }
 
-    private void revokeAllUserTokens(UserInfoEntity user){
+    public void revokeAllUserTokens(UserInfoEntity user){
         List<TokenEntity> list = tokenRepository.findValidTokensForUser(user.getId());
         if(list.isEmpty()){
             return;

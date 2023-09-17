@@ -68,7 +68,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<CustomExceptionResponse> emailIsAlreadyBusy(EmailIsAlreadyBusyException exception) {
         return ResponseEntity.badRequest().body(
                 CustomExceptionResponse.builder()
-                            .status(HttpStatus.CONFLICT.value())
+                            .status(HttpStatus.BAD_REQUEST.value())
                         .reason(exception.getLocalizedMessage())
                         .build()
         );
@@ -87,7 +87,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<CustomExceptionResponse> phoneNumberIsAlreadyBusy(PhoneNumberIsAlreadyBusyException exception) {
         return ResponseEntity.badRequest().body(
                 CustomExceptionResponse.builder()
-                        .status(HttpStatus.CONFLICT.value())
+                        .status(HttpStatus.BAD_REQUEST.value())
                         .reason(exception.getLocalizedMessage())
                         .build()
         );
@@ -155,7 +155,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(TokenDoestExistsException.class)
-    public ResponseEntity<CustomExceptionResponse> friendshipsHimself(TokenDoestExistsException exception){
+    public ResponseEntity<CustomExceptionResponse> tokenDoesntExists(TokenDoestExistsException exception){
         return new ResponseEntity<>(
                 CustomExceptionResponse.builder()
                         .status(HttpStatus.NOT_FOUND.value())
@@ -175,7 +175,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<CustomExceptionResponse> isNotRefresh(AccessDeniedException exception){
+    public ResponseEntity<CustomExceptionResponse> accessDenied(AccessDeniedException exception){
         return new ResponseEntity<>(
                 CustomExceptionResponse.builder()
                         .status(HttpStatus.BAD_REQUEST.value())
@@ -185,7 +185,17 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(RequestToHimselfException.class)
-    public ResponseEntity<CustomExceptionResponse> isNotRefresh(RequestToHimselfException exception){
+    public ResponseEntity<CustomExceptionResponse> requestHimself(RequestToHimselfException exception){
+        return new ResponseEntity<>(
+                CustomExceptionResponse.builder()
+                        .status(HttpStatus.BAD_REQUEST.value())
+                        .reason(exception.getLocalizedMessage())
+                        .build(),HttpStatus.BAD_REQUEST
+        );
+    }
+
+    @ExceptionHandler(UniqueConstraintException.class)
+    public ResponseEntity<CustomExceptionResponse> unqiueConstraint(UniqueConstraintException exception){
         return new ResponseEntity<>(
                 CustomExceptionResponse.builder()
                         .status(HttpStatus.BAD_REQUEST.value())

@@ -115,7 +115,7 @@ public interface MessageFeignClient {
     );
 
 
-    // SUPERVISOR MESSAGE CONTROLLER
+    // SUPERVISOR MESSAGE
 
     @GetMapping("/supervisor/message/getMessages/{u1}/{u2}")
     ResponseEntity<List<MessageResponse>> getMessagesByUsername(
@@ -144,5 +144,20 @@ public interface MessageFeignClient {
             @RequestHeader(name = "Authorization")String header,
             @RequestHeader(name = "Accept-Language",required = false)String lang,
             @PathVariable(name = "username") String username
+    );
+
+    // SUPERVISOR PROFILE
+
+    @PutMapping("/agent/profile/updateUsername/{username}")
+    ResponseEntity<UpdateResponse> updateUsername(
+            @RequestHeader(name = "Authorization")String header,
+            @RequestHeader(name = "Accept-Language",required = false)String lang,
+            @PathVariable(name = "username") String username
+    );
+
+    @DeleteMapping("/agent/profile/delete")
+    ResponseEntity<DeleteResponse> deleteUser(
+            @RequestHeader(name = "Authorization")String header,
+            @RequestHeader(name = "Accept-Language",required = false)String lang
     );
 }

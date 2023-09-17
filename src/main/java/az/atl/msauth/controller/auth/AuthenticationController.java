@@ -2,19 +2,22 @@ package az.atl.msauth.controller.auth;
 
 
 import az.atl.msauth.dto.request.auth.AuthRequest;
+import az.atl.msauth.dto.request.auth.LogoutRequest;
 import az.atl.msauth.dto.request.auth.RefreshRequest;
 import az.atl.msauth.dto.request.auth.RegisterRequest;
 import az.atl.msauth.dto.response.auth.AuthResponse;
+import az.atl.msauth.dto.response.auth.LogoutResponse;
 import az.atl.msauth.dto.response.auth.RefreshResponse;
 import az.atl.msauth.dto.response.auth.RegisterResponse;
 import az.atl.msauth.service.security.AuthenticationService;
+import az.atl.msauth.service.security.LogoutService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -47,7 +50,6 @@ public class AuthenticationController {
     }
 
     @Operation(summary = "Refresh token")
-
     @PostMapping("/refresh")
     public ResponseEntity<RefreshResponse> refreshToken(@Valid @RequestBody RefreshRequest refreshToken) {
         return ResponseEntity.ok(service.refreshToken(refreshToken));

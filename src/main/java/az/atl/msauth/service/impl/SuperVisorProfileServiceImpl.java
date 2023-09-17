@@ -3,7 +3,6 @@ package az.atl.msauth.service.impl;
 import az.atl.msauth.dao.entity.UserCredentialsEntity;
 import az.atl.msauth.dao.entity.UserInfoEntity;
 import az.atl.msauth.dao.entity.UserRoleEntity;
-import az.atl.msauth.dao.repository.UserCredentialsRepository;
 import az.atl.msauth.dao.repository.UserInfoRepository;
 import az.atl.msauth.dto.request.profile.RoleUpdateRequest;
 import az.atl.msauth.dto.request.profile.SuperVisorProfileRequest;
@@ -14,6 +13,7 @@ import az.atl.msauth.exceptions.RoleAlreadyExistsException;
 import az.atl.msauth.exceptions.UserNotFoundException;
 import az.atl.msauth.mapper.UserInfoEntityToSuperVisorProfileDTO;
 import az.atl.msauth.service.SuperVisorProfileService;
+import az.atl.msauth.service.security.AuthenticationService;
 import az.atl.msauth.service.security.UserDetailsService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -33,13 +33,16 @@ import java.util.stream.Collectors;
 public class SuperVisorProfileServiceImpl implements SuperVisorProfileService {
 
     private final UserInfoRepository repository;
+
+    private  final AuthenticationService authenticationService;
     @PersistenceContext
     private final EntityManager manager;
 
 private final UserDetailsService userDetailsService;
     private final MessageSource messageSource;
-    public SuperVisorProfileServiceImpl(UserInfoRepository repository, EntityManager manager, UserDetailsService userDetailsService, MessageSource messageSource) {
+    public SuperVisorProfileServiceImpl(UserInfoRepository repository, AuthenticationService authenticationService, EntityManager manager, UserDetailsService userDetailsService, MessageSource messageSource) {
         this.repository = repository;
+        this.authenticationService = authenticationService;
         this.manager = manager;
         this.userDetailsService = userDetailsService;
         this.messageSource = messageSource;
@@ -99,6 +102,8 @@ private final UserDetailsService userDetailsService;
                         "role_already_exists",null, LocaleContextHolder.getLocale()
                 ));
         entity.setRole(role.getRole());
+
+        authenticationService.revokeAllUserTokens(userCredentials.getUserInfoEntity());
         return UpdateResponse.builder()
                 .isUpdated(true)
                 .build();

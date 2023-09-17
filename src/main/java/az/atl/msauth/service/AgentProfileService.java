@@ -10,9 +10,9 @@ public interface AgentProfileService {
 
     AgentProfileRequest myProfile();
 
-    DeleteResponse deleteMyAccount();
+    DeleteResponse deleteMyAccount(String header,String lang);
 
-    UpdateResponse updateMyAccount(UpdateAccountRequest request);
+    UpdateResponse updateMyAccount(String header,String lang,UpdateAccountRequest request);
 
     UpdateResponse updatePassword(UpdatePasswordRequest request);
 
