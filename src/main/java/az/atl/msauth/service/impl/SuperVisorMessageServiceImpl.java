@@ -31,37 +31,38 @@ public class SuperVisorMessageServiceImpl implements SuperVisorMessageService {
     }
 
     @Override
-    public List<MessageResponse> getMessagesByUsername(String header,String lang,String u1, String u2) {
+    public List<MessageResponse> getMessagesByUsername(String header, String lang, String u1, String u2) {
         localeResolver(lang);
 
-        if(u1.equals(u2)) throw new SameUserException(messageSource.getMessage("same_user",null, LocaleContextHolder.getLocale()));
+        if (u1.equals(u2))
+            throw new SameUserException(messageSource.getMessage("same_user", null, LocaleContextHolder.getLocale()));
 
         userDetailsService.loadUserByUsername(u1);
         userDetailsService.loadUserByUsername(u2);
 
-        return messageFeignClient.getMessagesByUsername(header,lang,u1,u2).getBody();
+        return messageFeignClient.getMessagesByUsername(header, lang, u1, u2).getBody();
     }
 
     @Override
-    public List<ChatListResponse> getChatsOfUserByUsername(String header,String lang,String username) {
+    public List<ChatListResponse> getChatsOfUserByUsername(String header, String lang, String username) {
         localeResolver(lang);
 
         userDetailsService.loadUserByUsername(username);
 
-        return messageFeignClient.getChatsOfUserByUsername(header,lang,username).getBody();
+        return messageFeignClient.getChatsOfUserByUsername(header, lang, username).getBody();
     }
 
     @Override
-    public List<FriendListResponse> getFriendsOfUser(String header,String lang,String username) {
+    public List<FriendListResponse> getFriendsOfUser(String header, String lang, String username) {
         localeResolver(lang);
 
         userDetailsService.loadUserByUsername(username);
 
-        return messageFeignClient.getFriendsOfUser(header,lang,username).getBody();
+        return messageFeignClient.getFriendsOfUser(header, lang, username).getBody();
     }
 
     @Override
-    public ActivityReportResponse getActivityReport(String header,String lang,String username) {
+    public ActivityReportResponse getActivityReport(String header, String lang, String username) {
         localeResolver(lang);
 
         userDetailsService.loadUserByUsername(username);
@@ -70,7 +71,7 @@ public class SuperVisorMessageServiceImpl implements SuperVisorMessageService {
     }
 
     private static void localeResolver(String lang) {
-        if(Objects.isNull(lang) || lang.isEmpty()){
+        if (Objects.isNull(lang) || lang.isEmpty()) {
             lang = Locale.US.getLanguage();
         }
     }

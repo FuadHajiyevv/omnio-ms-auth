@@ -5,10 +5,9 @@ import az.atl.msauth.dto.request.profile.SuperVisorProfileRequest;
 import az.atl.msauth.dto.response.message.DeleteResponse;
 import az.atl.msauth.dto.response.message.UpdateResponse;
 import az.atl.msauth.service.impl.SuperVisorProfileServiceImpl;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -31,6 +30,7 @@ public class SuperVisorProfileController {
     public SuperVisorProfileController(SuperVisorProfileServiceImpl service) {
         this.service = service;
     }
+
     @Operation(summary = "Get all users list")
     @GetMapping
     public ResponseEntity<List<SuperVisorProfileRequest>> getAll() {
@@ -44,13 +44,18 @@ public class SuperVisorProfileController {
     ) {
         return ResponseEntity.ok(service.getById(id));
     }
+
     @Operation(summary = "Ban user by id")
     @DeleteMapping("/{id}")
     public ResponseEntity<DeleteResponse> deleteById(
+            @Parameter(hidden = true)
+            @RequestHeader(name = "Authorization")String header,
+            @RequestHeader(name = "Accept-Language",required = false)String lang,
             @Min(value = 1, message = "validation.id.min") @PathVariable(name = "id") Long id
     ) {
-        return ResponseEntity.ok(service.deleteById(id));
+        return ResponseEntity.ok(service.deleteById(header, lang, id));
     }
+
     @Operation(summary = "Change user's role id")
     @PostMapping("/{id}")
     public ResponseEntity<UpdateResponse> changeRole(

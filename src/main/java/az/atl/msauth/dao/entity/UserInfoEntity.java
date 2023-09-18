@@ -54,7 +54,7 @@ public class UserInfoEntity {
     @JoinColumn(name = "user_credentials_id", referencedColumnName = "id")
     private UserCredentialsEntity userCredentials;
 
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "userInfoEntity")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userInfoEntity")
     private List<TokenEntity> token;
 
     @Override

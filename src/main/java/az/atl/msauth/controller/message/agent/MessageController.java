@@ -37,41 +37,37 @@ public class MessageController {
     @PostMapping("/send")
     public ResponseEntity<DeliverResponse> sendPrivateMessage(
             @Parameter(hidden = true)
-            @RequestHeader(name = "Authorization")String header,
-            @RequestHeader(name = "Accept-Language",required = false) String lang,
+            @RequestHeader(name = "Authorization") String header,
+            @RequestHeader(name = "Accept-Language", required = false) String lang,
             @Valid @RequestBody MessageRequest request
     ) {
-        return ResponseEntity.ok(messageService.sendMessage(header,lang,request));
+        return ResponseEntity.ok(messageService.sendMessage(header, lang, request));
     }
 
     @Operation(summary = "Receiving messages with the user")
     @GetMapping("/getMessages/{username}")
     public ResponseEntity<List<MessageResponse>> getMessages(
             @Parameter(hidden = true)
-            @RequestHeader(name = "Authorization")String header,
-            @RequestHeader(name = "Accept-Language",required = false) String lang,
+            @RequestHeader(name = "Authorization") String header,
+            @RequestHeader(name = "Accept-Language", required = false) String lang,
             @NotEmpty(message = "validation.username.not_empty")
             @NotBlank(message = "validation.username.not_blank")
-            @Size(min = 4,message = "validation.username.size")
-            @PathVariable(name = "username")String username
-    ){
+            @Size(min = 4, message = "validation.username.size")
+            @PathVariable(name = "username") String username
+    ) {
 
-        return ResponseEntity.ok(messageService.getMessages(header,lang,username));
+        return ResponseEntity.ok(messageService.getMessages(header, lang, username));
     }
 
     @Operation(summary = "Get a list of chats")
     @GetMapping("/getChats")
     public ResponseEntity<List<ChatListResponse>> getMessages(
             @Parameter(hidden = true)
-            @RequestHeader(name = "Authorization")String header,
-            @RequestHeader(name = "Accept-Language",required = false) String lang
-            ){
-        return ResponseEntity.ok(messageService.getChatList(header,lang));
+            @RequestHeader(name = "Authorization") String header,
+            @RequestHeader(name = "Accept-Language", required = false) String lang
+    ) {
+        return ResponseEntity.ok(messageService.getChatList(header, lang));
     }
-
-
-
-
 
 
 }

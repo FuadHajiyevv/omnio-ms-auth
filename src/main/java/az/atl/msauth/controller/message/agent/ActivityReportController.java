@@ -29,8 +29,8 @@ public class ActivityReportController {
     public ResponseEntity<ActivityReportResponse> getReport(
             @Parameter(hidden = true)
             @RequestHeader(name = "Authorization") String token,
-            @RequestHeader(name = "Accept-Language",required = false)String lang
-    ){
-        return ResponseEntity.ok(activityReportService.getReport(token,lang));
+            @RequestHeader(name = "Accept-Language", required = false) String lang
+    ) {
+        return ResponseEntity.ok(activityReportService.getReport(token, lang));
     }
 }

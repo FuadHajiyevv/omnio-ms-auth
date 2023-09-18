@@ -11,7 +11,7 @@ public interface SuperVisorProfileService {
 
     List<SuperVisorProfileRequest> getAll();
 
-    DeleteResponse deleteById(Long id);
+    DeleteResponse deleteById(String header,String lang,Long id);
 
     SuperVisorProfileRequest getById(Long id);
 

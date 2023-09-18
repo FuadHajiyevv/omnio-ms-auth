@@ -6,7 +6,6 @@ import az.atl.msauth.dto.request.profile.UpdatePasswordRequest;
 import az.atl.msauth.dto.response.message.DeleteResponse;
 import az.atl.msauth.dto.response.message.UpdateResponse;
 import az.atl.msauth.service.impl.AgentProfileServiceImpl;
-import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -27,7 +26,6 @@ public class AgentProfileController {
     }
 
     @Operation(summary = "User's information")
-
     @GetMapping
     public ResponseEntity<AgentProfileRequest> myProfile() {
         return ResponseEntity.ok(userProfileService.myProfile());
@@ -37,8 +35,8 @@ public class AgentProfileController {
     @DeleteMapping
     public ResponseEntity<DeleteResponse> delete(
             @Parameter(hidden = true)
-            @RequestHeader(name = "Authorization")String header,
-            @RequestHeader(name = "Accept-Language",required = false)String lang
+            @RequestHeader(name = "Authorization") String header,
+            @RequestHeader(name = "Accept-Language", required = false) String lang
     ) {
         return ResponseEntity.ok(userProfileService.deleteMyAccount(header, lang));
     }
@@ -55,11 +53,11 @@ public class AgentProfileController {
     @PutMapping
     public ResponseEntity<UpdateResponse> updateAccount(
             @Parameter(hidden = true)
-            @RequestHeader(name = "Authorization")String header,
-            @RequestHeader(name = "Accept-Language",required = false)String lang,
+            @RequestHeader(name = "Authorization") String header,
+            @RequestHeader(name = "Accept-Language", required = false) String lang,
             @Valid @RequestBody UpdateAccountRequest request
     ) {
-        return ResponseEntity.ok(userProfileService.updateMyAccount(header,lang,request));
+        return ResponseEntity.ok(userProfileService.updateMyAccount(header, lang, request));
     }
 
 

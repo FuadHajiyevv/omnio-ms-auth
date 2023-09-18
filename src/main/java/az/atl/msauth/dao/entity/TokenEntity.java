@@ -21,7 +21,7 @@ public class TokenEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "token",columnDefinition = "TEXT")
+    @Column(name = "token", columnDefinition = "TEXT")
     private String token;
 
     @Column(name = "token_type")
@@ -35,7 +35,7 @@ public class TokenEntity {
     private Boolean revoked;
 
     @ManyToOne(targetEntity = UserInfoEntity.class)
-    @JoinColumn(name = "user_id",referencedColumnName = "id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserInfoEntity userInfoEntity;
 
 

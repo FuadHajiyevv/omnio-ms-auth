@@ -25,15 +25,14 @@ import io.swagger.v3.oas.annotations.servers.Server;
         )
 )
 @SecurityScheme(
-    name = "jwtAuth",
-      description = "JWT authentication",
+        name = "jwtAuth",
+        description = "JWT authentication",
         type = SecuritySchemeType.HTTP,
         bearerFormat = "JWT",
         in = SecuritySchemeIn.HEADER,
         scheme = "bearer"
 )
 public class OpenApiConfig {
-
 
 
 }

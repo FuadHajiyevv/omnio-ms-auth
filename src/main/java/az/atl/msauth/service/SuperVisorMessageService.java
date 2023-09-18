@@ -9,11 +9,11 @@ import java.util.List;
 
 public interface SuperVisorMessageService {
 
-    List<MessageResponse> getMessagesByUsername(String header,String lang,String u1, String u2);
+    List<MessageResponse> getMessagesByUsername(String header, String lang, String u1, String u2);
 
-    List<ChatListResponse> getChatsOfUserByUsername(String header,String lang,String username);
+    List<ChatListResponse> getChatsOfUserByUsername(String header, String lang, String username);
 
-    List<FriendListResponse> getFriendsOfUser(String header,String lang,String username);
+    List<FriendListResponse> getFriendsOfUser(String header, String lang, String username);
 
-    ActivityReportResponse getActivityReport(String header,String lang,String username);
+    ActivityReportResponse getActivityReport(String header, String lang, String username);
 }

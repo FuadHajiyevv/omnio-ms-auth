@@ -3,7 +3,6 @@ package az.atl.msauth.service.security;
 import az.atl.msauth.dao.entity.TokenEntity;
 import az.atl.msauth.dao.repository.TokenRepository;
 import az.atl.msauth.dto.request.message.SwitchStatusRequest;
-import az.atl.msauth.dto.request.message.UsernameRequest;
 import az.atl.msauth.exceptions.TokenDoestExistsException;
 import az.atl.msauth.feign.MessageFeignClient;
 import az.atl.msauth.service.jwt.JwtService;

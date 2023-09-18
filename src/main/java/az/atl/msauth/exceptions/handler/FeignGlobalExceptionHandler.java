@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 
-
 @RestControllerAdvice
 public class FeignGlobalExceptionHandler {
 
@@ -45,7 +44,7 @@ public class FeignGlobalExceptionHandler {
     }
 
     @ExceptionHandler(ExpiredJwtException.class)
-    public ResponseEntity<CustomExceptionResponse> expiredExc(ExpiredJwtException exception){
+    public ResponseEntity<CustomExceptionResponse> expiredExc(ExpiredJwtException exception) {
         String localizedMessage = messageSource.getMessage("jwt_expired", null, LocaleContextHolder.getLocale());
 
         CustomExceptionResponse response = new CustomExceptionResponse();

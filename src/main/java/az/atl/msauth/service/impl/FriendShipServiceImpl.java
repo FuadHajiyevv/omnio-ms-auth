@@ -35,7 +35,7 @@ public class FriendShipServiceImpl implements FriendShipService {
     }
 
     @Override
-    public FriendShipResponse sendFriendRequest(String header,String lang,UsernameRequest request) {
+    public FriendShipResponse sendFriendRequest(String header, String lang, UsernameRequest request) {
 
         localeResolver(lang);
 
@@ -43,8 +43,8 @@ public class FriendShipServiceImpl implements FriendShipService {
 
         Authentication user = SecurityContextHolder.getContext().getAuthentication();
 
-        if(user.getName().equals(request.getUsername())){
-            throw new ForbiddenFriendshipHimselfException(messageSource.getMessage("forbid_himself",null, LocaleContextHolder.getLocale()));
+        if (user.getName().equals(request.getUsername())) {
+            throw new ForbiddenFriendshipHimselfException(messageSource.getMessage("forbid_himself", null, LocaleContextHolder.getLocale()));
         }
 
         return client.sendFriendShip(header,
@@ -55,7 +55,7 @@ public class FriendShipServiceImpl implements FriendShipService {
     }
 
     @Override
-    public FriendShipResponse acceptFriendRequest(String header,String lang,String username) {
+    public FriendShipResponse acceptFriendRequest(String header, String lang, String username) {
 
         localeResolver(lang);
 
@@ -63,18 +63,18 @@ public class FriendShipServiceImpl implements FriendShipService {
 
         Authentication user = SecurityContextHolder.getContext().getAuthentication();
 
-        if(user.getName().equals(username)){
-            throw new ForbiddenFriendshipHimselfException(messageSource.getMessage("forbid_himself",null, LocaleContextHolder.getLocale()));
+        if (user.getName().equals(username)) {
+            throw new ForbiddenFriendshipHimselfException(messageSource.getMessage("forbid_himself", null, LocaleContextHolder.getLocale()));
         }
 
-        return client.acceptFriendship(header,lang,
+        return client.acceptFriendship(header, lang,
                 AcceptFriendShipRequest.builder()
                         .username(username)
                         .build()).getBody();
     }
 
     @Override
-    public FriendShipResponse rejectFriendRequest(String header,String lang,String username) {
+    public FriendShipResponse rejectFriendRequest(String header, String lang, String username) {
 
         localeResolver(lang);
 
@@ -82,41 +82,41 @@ public class FriendShipServiceImpl implements FriendShipService {
 
         Authentication user = SecurityContextHolder.getContext().getAuthentication();
 
-        if(user.getName().equals(username)){
-            throw new ForbiddenFriendshipHimselfException(messageSource.getMessage("forbid_himself",null, LocaleContextHolder.getLocale()));
+        if (user.getName().equals(username)) {
+            throw new ForbiddenFriendshipHimselfException(messageSource.getMessage("forbid_himself", null, LocaleContextHolder.getLocale()));
         }
 
 
-        return client.rejectFriendRequest(header,lang,username).getBody();
+        return client.rejectFriendRequest(header, lang, username).getBody();
     }
 
     private static void localeResolver(String lang) {
-        if(Objects.isNull(lang) || lang.isEmpty()){
+        if (Objects.isNull(lang) || lang.isEmpty()) {
             lang = Locale.US.getLanguage();
         }
     }
 
     @Override
-    public List<FriendListResponse> listFriends(String header,String lang) {
+    public List<FriendListResponse> listFriends(String header, String lang) {
 
         localeResolver(lang);
 
-        return client.friendList(header,lang).getBody();
+        return client.friendList(header, lang).getBody();
     }
 
     @Override
-    public List<AcceptFriendShipResponse> friendshipRequests(String header,String lang) {
+    public List<AcceptFriendShipResponse> friendshipRequests(String header, String lang) {
 
         localeResolver(lang);
 
         return client
-                .getPendingUsers(header,lang)
+                .getPendingUsers(header, lang)
                 .getBody();
 
     }
 
     @Override
-    public FriendShipResponse blockUser(String header,String lang,String username) {
+    public FriendShipResponse blockUser(String header, String lang, String username) {
 
         localeResolver(lang);
 
@@ -124,16 +124,16 @@ public class FriendShipServiceImpl implements FriendShipService {
 
         Authentication user = SecurityContextHolder.getContext().getAuthentication();
 
-        if(user.getName().equals(username)){
-            throw new ForbiddenFriendshipHimselfException(messageSource.getMessage("forbid_himself",null, LocaleContextHolder.getLocale()));
+        if (user.getName().equals(username)) {
+            throw new ForbiddenFriendshipHimselfException(messageSource.getMessage("forbid_himself", null, LocaleContextHolder.getLocale()));
         }
 
 
-        return client.blockUser(header,lang,username).getBody();
+        return client.blockUser(header, lang, username).getBody();
     }
 
     @Override
-    public FriendShipResponse unblockUser(String header,String lang,String username) {
+    public FriendShipResponse unblockUser(String header, String lang, String username) {
 
         localeResolver(lang);
 
@@ -141,11 +141,11 @@ public class FriendShipServiceImpl implements FriendShipService {
 
         Authentication user = SecurityContextHolder.getContext().getAuthentication();
 
-        if(user.getName().equals(username)){
-            throw new ForbiddenFriendshipHimselfException(messageSource.getMessage("forbid_himself",null, LocaleContextHolder.getLocale()));
+        if (user.getName().equals(username)) {
+            throw new ForbiddenFriendshipHimselfException(messageSource.getMessage("forbid_himself", null, LocaleContextHolder.getLocale()));
         }
 
-        return client.unblockUser(header,lang,username).getBody();
+        return client.unblockUser(header, lang, username).getBody();
     }
 
 

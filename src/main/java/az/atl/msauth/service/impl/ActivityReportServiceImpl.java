@@ -21,11 +21,11 @@ public class ActivityReportServiceImpl implements ActivityReportService {
     public ActivityReportResponse getReport(String token, String lang) {
         localeResolver(lang);
 
-        return messageFeignClient.getReport(token,lang).getBody();
+        return messageFeignClient.getReport(token, lang).getBody();
     }
 
     private static void localeResolver(String lang) {
-        if(Objects.isNull(lang) || lang.isEmpty()){
+        if (Objects.isNull(lang) || lang.isEmpty()) {
             lang = Locale.US.getLanguage();
         }
     }

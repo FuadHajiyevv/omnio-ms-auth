@@ -11,7 +11,6 @@ import az.atl.msauth.dto.request.auth.RefreshRequest;
 import az.atl.msauth.dto.request.auth.RegisterRequest;
 import az.atl.msauth.dto.request.message.ClientSaveRequest;
 import az.atl.msauth.dto.request.message.SwitchStatusRequest;
-import az.atl.msauth.dto.request.message.UsernameRequest;
 import az.atl.msauth.dto.response.auth.AuthResponse;
 import az.atl.msauth.dto.response.auth.RefreshResponse;
 import az.atl.msauth.dto.response.auth.RegisterResponse;
@@ -32,7 +31,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import static az.atl.msauth.enums.Role.AGENT;
 import static az.atl.msauth.enums.Status.ONLINE;
@@ -72,7 +70,7 @@ public class AuthenticationService {
     public RegisterResponse register(RegisterRequest request) {
 
         if (repository.findByUsername(request.getUsername()).isPresent()) {
-            throw new UserAlreadyExistsException(messageSource.getMessage("user_already_exists",null,LocaleContextHolder.getLocale()));
+            throw new UserAlreadyExistsException(messageSource.getMessage("user_already_exists", null, LocaleContextHolder.getLocale()));
         }
 
         UserCredentialsEntity user = UserCredentialsEntity.builder()
@@ -105,7 +103,7 @@ public class AuthenticationService {
 
         repository.save(user);
         return RegisterResponse.builder()
-                .message(messageSource.getMessage("successful_registration",null,LocaleContextHolder.getLocale()))
+                .message(messageSource.getMessage("successful_registration", null, LocaleContextHolder.getLocale()))
                 .build();
     }
 
@@ -115,7 +113,7 @@ public class AuthenticationService {
                 request.getUsername(), request.getPassword())
         );
         UserDetails user = repository.findByUsername(request.getUsername()).
-                orElseThrow(() -> new UserNotFoundException(messageSource.getMessage("user_not_found",null,LocaleContextHolder.getLocale())));
+                orElseThrow(() -> new UserNotFoundException(messageSource.getMessage("user_not_found", null, LocaleContextHolder.getLocale())));
         String accessToken = service.generateToken(user);
         String refreshToken = service.generateRefreshToken(user);
 
@@ -131,7 +129,6 @@ public class AuthenticationService {
                         .status(ONLINE.name())
                         .build()
         );
-
 
 
         return AuthResponse.builder()
@@ -153,9 +150,9 @@ public class AuthenticationService {
         tokenRepository.save(token);
     }
 
-    public void revokeAllUserTokens(UserInfoEntity user){
+    public void revokeAllUserTokens(UserInfoEntity user) {
         List<TokenEntity> list = tokenRepository.findValidTokensForUser(user.getId());
-        if(list.isEmpty()){
+        if (list.isEmpty()) {
             return;
         }
         list.forEach(o -> {
@@ -170,11 +167,11 @@ public class AuthenticationService {
 
         String username = service.getUsernameFromJwt(refreshToken.getRefreshToken());
         UserCredentialsEntity user = repository.findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException(messageSource.getMessage("user_not_found",null,LocaleContextHolder.getLocale())));
+                .orElseThrow(() -> new UserNotFoundException(messageSource.getMessage("user_not_found", null, LocaleContextHolder.getLocale())));
 
 
-        if(tokenRepository.findByToken(refreshToken.getRefreshToken()).isPresent()){
-            throw new TokenIsNotRefreshException(messageSource.getMessage("not_refresh_token",null, LocaleContextHolder.getLocale()));
+        if (tokenRepository.findByToken(refreshToken.getRefreshToken()).isPresent()) {
+            throw new TokenIsNotRefreshException(messageSource.getMessage("not_refresh_token", null, LocaleContextHolder.getLocale()));
         }
         String newAccessToken = null;
         String newRefreshToken = null;

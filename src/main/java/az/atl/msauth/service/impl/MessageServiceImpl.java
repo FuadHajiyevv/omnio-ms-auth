@@ -36,7 +36,7 @@ public class MessageServiceImpl implements MessageService {
 
 
     @Override
-    public DeliverResponse sendMessage(String header,String lang,MessageRequest request) {
+    public DeliverResponse sendMessage(String header, String lang, MessageRequest request) {
 
         localeResolver(lang);
 
@@ -44,15 +44,15 @@ public class MessageServiceImpl implements MessageService {
 
         Authentication user = SecurityContextHolder.getContext().getAuthentication();
 
-        if(user.getName().equals(request.getFriend())){
-            throw new ForbiddenFriendshipHimselfException(messageSource.getMessage("forbid_himself",null, LocaleContextHolder.getLocale()));
+        if (user.getName().equals(request.getFriend())) {
+            throw new ForbiddenFriendshipHimselfException(messageSource.getMessage("forbid_himself", null, LocaleContextHolder.getLocale()));
         }
 
-        return client.sendMessage(header,lang,request).getBody();
+        return client.sendMessage(header, lang, request).getBody();
     }
 
     @Override
-    public List<MessageResponse> getMessages(String header,String lang,String username) {
+    public List<MessageResponse> getMessages(String header, String lang, String username) {
 
         localeResolver(lang);
 
@@ -60,22 +60,22 @@ public class MessageServiceImpl implements MessageService {
 
         Authentication user = SecurityContextHolder.getContext().getAuthentication();
 
-        if(user.getName().equals(username)){
-            throw new ForbiddenFriendshipHimselfException(messageSource.getMessage("forbid_himself",null, LocaleContextHolder.getLocale()));
+        if (user.getName().equals(username)) {
+            throw new ForbiddenFriendshipHimselfException(messageSource.getMessage("forbid_himself", null, LocaleContextHolder.getLocale()));
         }
 
-        return client.getMessages(header,lang,username).getBody();
+        return client.getMessages(header, lang, username).getBody();
     }
 
     @Override
-    public List<ChatListResponse> getChatList(String header,String lang) {
+    public List<ChatListResponse> getChatList(String header, String lang) {
 
         localeResolver(lang);
-        return client.getChats(header,lang).getBody();
+        return client.getChats(header, lang).getBody();
     }
 
     private static void localeResolver(String lang) {
-        if(Objects.isNull(lang) || lang.isEmpty()){
+        if (Objects.isNull(lang) || lang.isEmpty()) {
             lang = Locale.US.getLanguage();
         }
     }

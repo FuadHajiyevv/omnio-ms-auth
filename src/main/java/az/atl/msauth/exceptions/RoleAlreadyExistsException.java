@@ -1,6 +1,6 @@
 package az.atl.msauth.exceptions;
 
-public class RoleAlreadyExistsException extends RuntimeException{
+public class RoleAlreadyExistsException extends RuntimeException {
     public RoleAlreadyExistsException() {
         super();
     }

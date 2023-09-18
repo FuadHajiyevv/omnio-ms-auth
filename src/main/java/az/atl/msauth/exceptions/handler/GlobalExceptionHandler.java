@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.nio.file.AccessDeniedException;
-import java.security.SignatureException;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -37,7 +36,7 @@ public class GlobalExceptionHandler {
         BindingResult bindingResult = exception.getBindingResult();
         List<ObjectError> errors = bindingResult.getAllErrors();
         List<String> localizedErrors = errors.stream()
-                .map(error -> messageSource.getMessage(Objects.requireNonNull(error.getDefaultMessage()),null,LocaleContextHolder.getLocale()))
+                .map(error -> messageSource.getMessage(Objects.requireNonNull(error.getDefaultMessage()), null, LocaleContextHolder.getLocale()))
                 .collect(Collectors.toList());
 
         return ResponseEntity.badRequest().body(
@@ -55,7 +54,7 @@ public class GlobalExceptionHandler {
         List<String> errorMessages = exception.getConstraintViolations()
                 .stream()
                 .map(ConstraintViolation::getMessage)
-                .map(message -> messageSource.getMessage(message,null,LocaleContextHolder.getLocale()))
+                .map(message -> messageSource.getMessage(message, null, LocaleContextHolder.getLocale()))
                 .toList();
 
         return ResponseEntity.badRequest().body(
@@ -68,43 +67,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<CustomExceptionResponse> emailIsAlreadyBusy(EmailIsAlreadyBusyException exception) {
         return ResponseEntity.badRequest().body(
                 CustomExceptionResponse.builder()
-                            .status(HttpStatus.BAD_REQUEST.value())
+                        .status(HttpStatus.BAD_REQUEST.value())
                         .reason(exception.getLocalizedMessage())
                         .build()
         );
     }
 
-    @ExceptionHandler(IncorrectLoginOrPasswordException.class)
-    public ResponseEntity<CustomExceptionResponse> incorrectLoginOrPassword(IncorrectLoginOrPasswordException exception) {
-        return ResponseEntity.badRequest().body(
-                CustomExceptionResponse.builder()
-                        .status(HttpStatus.UNAUTHORIZED.value())
-                        .reason(exception.getLocalizedMessage())
-                        .build()
-        );
-    }
     @ExceptionHandler(PhoneNumberIsAlreadyBusyException.class)
     public ResponseEntity<CustomExceptionResponse> phoneNumberIsAlreadyBusy(PhoneNumberIsAlreadyBusyException exception) {
-        return ResponseEntity.badRequest().body(
-                CustomExceptionResponse.builder()
-                        .status(HttpStatus.BAD_REQUEST.value())
-                        .reason(exception.getLocalizedMessage())
-                        .build()
-        );
-    }
-
-    @ExceptionHandler(TokenIsExpiredException.class)
-    public ResponseEntity<CustomExceptionResponse> tokenIsNotExpired(TokenIsExpiredException exception) {
-        return ResponseEntity.badRequest().body(
-                CustomExceptionResponse.builder()
-                        .status(HttpStatus.BAD_REQUEST.value())
-                        .reason(exception.getLocalizedMessage())
-                        .build()
-        );
-    }
-
-    @ExceptionHandler(UnsuitableIdFormatException.class)
-    public ResponseEntity<CustomExceptionResponse> unSuitableFormat(UnsuitableIdFormatException exception) {
         return ResponseEntity.badRequest().body(
                 CustomExceptionResponse.builder()
                         .status(HttpStatus.BAD_REQUEST.value())
@@ -134,73 +104,82 @@ public class GlobalExceptionHandler {
     }
 
 
-
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<CustomExceptionResponse> userNotFound(UserNotFoundException exception) {
         return new ResponseEntity<>(
                 CustomExceptionResponse.builder()
                         .status(HttpStatus.NOT_FOUND.value())
                         .reason(exception.getLocalizedMessage())
-                        .build(),HttpStatus.NOT_FOUND);
+                        .build(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(ForbiddenFriendshipHimselfException.class)
-    public ResponseEntity<CustomExceptionResponse> friendshipsHimself(ForbiddenFriendshipHimselfException exception){
+    public ResponseEntity<CustomExceptionResponse> friendshipsHimself(ForbiddenFriendshipHimselfException exception) {
         return new ResponseEntity<>(
                 CustomExceptionResponse.builder()
                         .status(HttpStatus.FORBIDDEN.value())
                         .reason(exception.getLocalizedMessage())
-                        .build(),HttpStatus.FORBIDDEN
+                        .build(), HttpStatus.FORBIDDEN
         );
     }
 
     @ExceptionHandler(TokenDoestExistsException.class)
-    public ResponseEntity<CustomExceptionResponse> tokenDoesntExists(TokenDoestExistsException exception){
+    public ResponseEntity<CustomExceptionResponse> tokenDoesntExists(TokenDoestExistsException exception) {
         return new ResponseEntity<>(
                 CustomExceptionResponse.builder()
                         .status(HttpStatus.NOT_FOUND.value())
                         .reason(exception.getLocalizedMessage())
-                        .build(),HttpStatus.NOT_FOUND
+                        .build(), HttpStatus.NOT_FOUND
         );
     }
 
     @ExceptionHandler(TokenIsNotRefreshException.class)
-    public ResponseEntity<CustomExceptionResponse> isNotRefresh(TokenIsNotRefreshException exception){
+    public ResponseEntity<CustomExceptionResponse> isNotRefresh(TokenIsNotRefreshException exception) {
         return new ResponseEntity<>(
                 CustomExceptionResponse.builder()
                         .status(HttpStatus.BAD_REQUEST.value())
                         .reason(exception.getLocalizedMessage())
-                        .build(),HttpStatus.BAD_REQUEST
+                        .build(), HttpStatus.BAD_REQUEST
         );
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<CustomExceptionResponse> accessDenied(AccessDeniedException exception){
+    public ResponseEntity<CustomExceptionResponse> accessDenied(AccessDeniedException exception) {
         return new ResponseEntity<>(
                 CustomExceptionResponse.builder()
                         .status(HttpStatus.BAD_REQUEST.value())
                         .reason(exception.getLocalizedMessage())
-                        .build(),HttpStatus.BAD_REQUEST
+                        .build(), HttpStatus.BAD_REQUEST
         );
     }
 
     @ExceptionHandler(RequestToHimselfException.class)
-    public ResponseEntity<CustomExceptionResponse> requestHimself(RequestToHimselfException exception){
+    public ResponseEntity<CustomExceptionResponse> requestHimself(RequestToHimselfException exception) {
         return new ResponseEntity<>(
                 CustomExceptionResponse.builder()
                         .status(HttpStatus.BAD_REQUEST.value())
                         .reason(exception.getLocalizedMessage())
-                        .build(),HttpStatus.BAD_REQUEST
+                        .build(), HttpStatus.BAD_REQUEST
         );
     }
 
     @ExceptionHandler(UniqueConstraintException.class)
-    public ResponseEntity<CustomExceptionResponse> unqiueConstraint(UniqueConstraintException exception){
+    public ResponseEntity<CustomExceptionResponse> unqiueConstraint(UniqueConstraintException exception) {
         return new ResponseEntity<>(
                 CustomExceptionResponse.builder()
                         .status(HttpStatus.BAD_REQUEST.value())
                         .reason(exception.getLocalizedMessage())
-                        .build(),HttpStatus.BAD_REQUEST
+                        .build(), HttpStatus.BAD_REQUEST
+        );
+    }
+
+    @ExceptionHandler(SameUserException.class)
+    public ResponseEntity<CustomExceptionResponse> unqiueConstraint(SameUserException exception) {
+        return new ResponseEntity<>(
+                CustomExceptionResponse.builder()
+                        .status(HttpStatus.BAD_REQUEST.value())
+                        .reason(exception.getLocalizedMessage())
+                        .build(), HttpStatus.BAD_REQUEST
         );
     }
 

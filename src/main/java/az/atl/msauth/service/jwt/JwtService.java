@@ -124,7 +124,7 @@ public class JwtService {
                 return true;
             }
         }
-        throw new AccessDeniedException(messageSource.getMessage("access_denied",null, LocaleContextHolder.getLocale()));
+        throw new AccessDeniedException(messageSource.getMessage("access_denied", null, LocaleContextHolder.getLocale()));
     }
 
     public boolean isValid(String jwt, UserDetails userDetails) {

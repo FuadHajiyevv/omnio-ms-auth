@@ -18,15 +18,15 @@ public class LocaleConfig implements WebMvcConfigurer {
 
 
     @Bean
-    public LocaleResolver localeResolver(){
+    public LocaleResolver localeResolver() {
         AcceptHeaderLocaleResolver localeResolver = new AcceptHeaderLocaleResolver();
         localeResolver.setDefaultLocale(Locale.US);
-        localeResolver.setSupportedLocales(List.of(Locale.US,Locale.forLanguageTag("ru")));
+        localeResolver.setSupportedLocales(List.of(Locale.US, Locale.forLanguageTag("ru")));
         return localeResolver;
     }
 
     @Bean
-    public LocaleChangeInterceptor localeInterceptor(){
+    public LocaleChangeInterceptor localeInterceptor() {
         LocaleChangeInterceptor localeInterceptor = new LocaleChangeInterceptor();
         localeInterceptor.setParamName("Accept-Language");
         return localeInterceptor;
@@ -47,7 +47,7 @@ public class LocaleConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public LocalValidatorFactoryBean getValidator(){
+    public LocalValidatorFactoryBean getValidator() {
         LocalValidatorFactoryBean validatorFactoryBean = new LocalValidatorFactoryBean();
         validatorFactoryBean.setValidationMessageSource(messageSource());
         return validatorFactoryBean;

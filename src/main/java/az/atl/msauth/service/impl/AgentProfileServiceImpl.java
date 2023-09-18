@@ -16,7 +16,6 @@ import az.atl.msauth.exceptions.UserNotFoundException;
 import az.atl.msauth.feign.MessageFeignClient;
 import az.atl.msauth.service.AgentProfileService;
 import az.atl.msauth.service.security.AuthenticationService;
-import az.atl.msauth.service.security.LogoutService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
@@ -34,12 +33,8 @@ import java.util.Objects;
 public class AgentProfileServiceImpl implements AgentProfileService {
     private final UserCredentialsRepository repository;
     @PersistenceContext
-
     private final EntityManager manager;
-
-
     private final MessageFeignClient feignClient;
-
     private final SuperVisorProfileServiceImpl superVisorProfileService;
     private final AuthenticationService authenticationService;
     private final MessageSource messageSource;
@@ -76,12 +71,12 @@ public class AgentProfileServiceImpl implements AgentProfileService {
 
     @Transactional
     @Override
-    public DeleteResponse deleteMyAccount(String header,String lang) {
+    public DeleteResponse deleteMyAccount(String header, String lang) {
         Authentication contextHolder = SecurityContextHolder.getContext().getAuthentication();
         UserCredentialsEntity entity = repository.findByUsername(contextHolder.getName()).get();
         repository.delete(entity);
 
-        feignClient.deleteUser(header,lang);
+        feignClient.deleteUser(header, lang);
 
         authenticationService.revokeAllUserTokens(entity.getUserInfoEntity());
         SecurityContextHolder.clearContext();
@@ -91,7 +86,7 @@ public class AgentProfileServiceImpl implements AgentProfileService {
 
     @Transactional
     @Override
-    public UpdateResponse updateMyAccount(String header,String lang,UpdateAccountRequest request) {
+    public UpdateResponse updateMyAccount(String header, String lang, UpdateAccountRequest request) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -107,13 +102,14 @@ public class AgentProfileServiceImpl implements AgentProfileService {
         List<SuperVisorProfileRequest> updateList = list.stream().filter(o -> o.getEmail().equals(request.getEmail()) || o.getUsername().equals(request.getUsername()) || o.getPhoneNumber().equals(request.getPhoneNumber())).toList();
 
         if (entity.getPhoneNumber().equals(request.getPhoneNumber())) {
-            throw new PhoneNumberIsAlreadyBusyException(messageSource.getMessage("phone_number_is_already_exists",null, LocaleContextHolder.getLocale()));
+            throw new PhoneNumberIsAlreadyBusyException(messageSource.getMessage("phone_number_is_already_exists", null, LocaleContextHolder.getLocale()));
         }
         if (entity.getEmail().equals(request.getEmail())) {
-            throw new EmailIsAlreadyBusyException(messageSource.getMessage("email_is_already_busy",null,LocaleContextHolder.getLocale()));
+            throw new EmailIsAlreadyBusyException(messageSource.getMessage("email_is_already_busy", null, LocaleContextHolder.getLocale()));
         }
 
-        if(!updateList.isEmpty()) throw new UniqueConstraintException(messageSource.getMessage("unique_constraint",null,LocaleContextHolder.getLocale()));
+        if (!updateList.isEmpty())
+            throw new UniqueConstraintException(messageSource.getMessage("unique_constraint", null, LocaleContextHolder.getLocale()));
 
 
         entity.setEmail(request.getEmail());
@@ -123,7 +119,7 @@ public class AgentProfileServiceImpl implements AgentProfileService {
         entity.setSurname(request.getSurname());
         entity.getUserCredentials().setUsername(request.getUsername());
 
-        if(!request.getUsername().equals(authentication.getName())) {
+        if (!request.getUsername().equals(authentication.getName())) {
             feignClient.updateUsername(header, lang, request.getUsername());
             authenticationService.revokeAllUserTokens(entity);
         }
@@ -138,7 +134,7 @@ public class AgentProfileServiceImpl implements AgentProfileService {
         Authentication contextHolder = SecurityContextHolder.getContext().getAuthentication();
         UserCredentialsEntity entity = repository.findByUsername(contextHolder.getName()).get();
         if (encoder.matches(request.getCurrentPassword(), entity.getHash())) {
-            if(Objects.equals(request.getNewPassword(),request.getRepeatNewPassword())) {
+            if (Objects.equals(request.getNewPassword(), request.getRepeatNewPassword())) {
                 entity.setHash(encoder.encode(request.getNewPassword()));
 
                 SecurityContextHolder.clearContext();

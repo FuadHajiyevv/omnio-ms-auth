@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface TokenRepository  extends JpaRepository<TokenEntity,Long> {
+public interface TokenRepository extends JpaRepository<TokenEntity, Long> {
 
     @Query("SELECT t FROM TokenEntity t " +
             "WHERE t.userInfoEntity.id = :userId AND t.expired = false AND t.revoked = false")

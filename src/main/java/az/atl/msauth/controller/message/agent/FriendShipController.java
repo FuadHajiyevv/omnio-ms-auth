@@ -12,7 +12,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -43,6 +42,7 @@ public class FriendShipController {
     ) {
         return ResponseEntity.ok(service.sendFriendRequest(header, lang, request));
     }
+
     @Operation(summary = "List of Friendship requests")
     @GetMapping("/friendshipRequests")
     public ResponseEntity<List<AcceptFriendShipResponse>> getPendingUsers(
@@ -50,7 +50,7 @@ public class FriendShipController {
             @RequestHeader(name = "Authorization") String header,
             @RequestHeader(name = "Accept-Language", required = false) String lang
     ) {
-        return ResponseEntity.ok(service.friendshipRequests(header,lang));
+        return ResponseEntity.ok(service.friendshipRequests(header, lang));
     }
 
     @Operation(summary = "Approval of a friendship request")
@@ -61,10 +61,10 @@ public class FriendShipController {
             @RequestHeader(name = "Accept-Language", required = false) String lang,
             @NotEmpty(message = "validation.username.not_empty")
             @NotBlank(message = "validation.username.not_blank")
-            @Size(min = 4,message = "validation.username.size")
+            @Size(min = 4, message = "validation.username.size")
             @PathVariable(name = "username") String username
     ) {
-        return ResponseEntity.ok(service.acceptFriendRequest(token,lang, username));
+        return ResponseEntity.ok(service.acceptFriendRequest(token, lang, username));
     }
 
     @Operation(summary = "Refusal of a friendship request")
@@ -75,10 +75,10 @@ public class FriendShipController {
             @RequestHeader(name = "Accept-Language", required = false) String lang,
             @NotEmpty(message = "validation.username.not_empty")
             @NotBlank(message = "validation.username.not_blank")
-            @Size(min = 4,message = "validation.username.size")
+            @Size(min = 4, message = "validation.username.size")
             @PathVariable(name = "username") String username
     ) {
-        return ResponseEntity.ok(service.rejectFriendRequest(token,lang, username));
+        return ResponseEntity.ok(service.rejectFriendRequest(token, lang, username));
     }
 
     @Operation(summary = "List of friends")
@@ -88,32 +88,32 @@ public class FriendShipController {
             @RequestHeader(name = "Authorization") String token,
             @RequestHeader(name = "Accept-Language", required = false) String lang
     ) {
-        return ResponseEntity.ok(service.listFriends(token,lang));
+        return ResponseEntity.ok(service.listFriends(token, lang));
     }
 
     @Operation(summary = "Block a user from the friends list")
     @PatchMapping("/block/{username}")
     ResponseEntity<FriendShipResponse> blockUser(
             @RequestHeader(name = "Authorization") String token,
-            @RequestHeader(name = "Accept-Language",required = false) String lang,
+            @RequestHeader(name = "Accept-Language", required = false) String lang,
             @NotEmpty(message = "validation.username.not_empty")
             @NotBlank(message = "validation.username.not_blank")
-            @Size(min = 4,message = "validation.username.size")
+            @Size(min = 4, message = "validation.username.size")
             @PathVariable(name = "username") String username
     ) {
-        return ResponseEntity.ok(service.blockUser(token,lang, username));
+        return ResponseEntity.ok(service.blockUser(token, lang, username));
     }
 
     @Operation(summary = "Unblock a user from the blocked list")
     @PatchMapping("/unblock/{username}")
     ResponseEntity<FriendShipResponse> unblockUser(
             @RequestHeader(name = "Authorization") String token,
-            @RequestHeader(name = "Accept-Language",required = false) String lang,
+            @RequestHeader(name = "Accept-Language", required = false) String lang,
             @NotEmpty(message = "validation.username.not_empty")
             @NotBlank(message = "validation.username.not_blank")
-            @Size(min = 4,message = "validation.username.size")
+            @Size(min = 4, message = "validation.username.size")
             @PathVariable(name = "username") String username
     ) {
-        return ResponseEntity.ok(service.unblockUser(token,lang, username));
+        return ResponseEntity.ok(service.unblockUser(token, lang, username));
     }
 }

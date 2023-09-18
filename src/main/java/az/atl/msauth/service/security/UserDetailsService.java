@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class UserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
 
     private final UserCredentialsRepository repository;
-    private  final MessageSource messageSource;
+    private final MessageSource messageSource;
 
     public UserDetailsService(UserCredentialsRepository repository, MessageSource messageSource) {
         this.repository = repository;
@@ -23,7 +23,7 @@ public class UserDetailsService implements org.springframework.security.core.use
     @Override
     public UserDetails loadUserByUsername(String username) {
         UserCredentialsEntity userCredentials = repository.findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException(messageSource.getMessage("user_not_found",null,LocaleContextHolder.getLocale())));
+                .orElseThrow(() -> new UserNotFoundException(messageSource.getMessage("user_not_found", null, LocaleContextHolder.getLocale())));
 
         return userCredentials;
     }
