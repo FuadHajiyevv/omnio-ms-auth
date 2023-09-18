@@ -10,6 +10,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 @Getter
@@ -52,6 +53,9 @@ public class UserInfoEntity {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_credentials_id", referencedColumnName = "id")
     private UserCredentialsEntity userCredentials;
+
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "userInfoEntity")
+    private List<TokenEntity> token;
 
     @Override
     public boolean equals(Object o) {
