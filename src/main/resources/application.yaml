@@ -18,6 +18,9 @@ spring:
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     open-in-view: false
+  cloud:
+    openfeign:
+      url: http://localhost:8085/omnio
 
 jwt:
   token:
@@ -29,6 +32,7 @@ jwt:
 password:
   encoder:
     hash-function: Bcrypt
+
 
 
 

@@ -9,15 +9,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(value = "feignMessage", url = "http://localhost:8085/omnio")
+@FeignClient(value = "feignMessage", url = "${spring.cloud.openfeign.url}")
 public interface MessageFeignClient {
 
-    @PostMapping("/messaging/send")
-    ResponseEntity<DeliverResponse> privateMessage
-            (
-                    @RequestHeader(name = "Authorization") String header,
-                    @RequestBody ClientPrivateMessageRequest request
-            );
 
 
     @PostMapping("/auth/save")
