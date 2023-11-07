@@ -153,7 +153,7 @@ public interface MessageFeignClient {
             @RequestHeader(name = "Accept-Language", required = false) String lang
     );
 
-    @DeleteMapping("/supervisor/profile/delete/{username}")
+    @DeleteMapping("/supervisor/profile/{username}")
     ResponseEntity<DeleteResponse> deleteUser(
             @RequestHeader(name = "Authorization")String header,
             @RequestHeader(name = "Accept-Language",required = false)String lang,

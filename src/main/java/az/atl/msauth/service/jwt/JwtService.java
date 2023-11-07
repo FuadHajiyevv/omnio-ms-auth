@@ -131,13 +131,4 @@ public class JwtService {
         String usernameExtractFromJwt = extractClaim(jwt, Claims::getSubject);
         return usernameExtractFromJwt.equals(userDetails.getUsername()) && !isJwtExpired(jwt);
     }
-
-    public LogoutResponse invalidateToken(LogoutRequest request) {
-        Claims allClaims = getAllClaimsFromJwt(request.getToken());
-        Date now = new Date();
-        allClaims.setExpiration(now);
-        return LogoutResponse.builder()
-                .logout(true)
-                .build();
-    }
 }

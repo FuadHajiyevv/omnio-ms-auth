@@ -9,16 +9,15 @@ import az.atl.msauth.dto.request.profile.UpdateAccountRequest;
 import az.atl.msauth.dto.request.profile.UpdatePasswordRequest;
 import az.atl.msauth.dto.response.message.DeleteResponse;
 import az.atl.msauth.dto.response.message.UpdateResponse;
-import az.atl.msauth.exceptions.EmailIsAlreadyBusyException;
-import az.atl.msauth.exceptions.PhoneNumberIsAlreadyBusyException;
-import az.atl.msauth.exceptions.UniqueConstraintException;
-import az.atl.msauth.exceptions.UserNotFoundException;
+import az.atl.msauth.exceptions.*;
 import az.atl.msauth.feign.MessageFeignClient;
 import az.atl.msauth.service.AgentProfileService;
 import az.atl.msauth.service.security.AuthenticationService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.Null;
+import org.springframework.cglib.core.Local;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.core.Authentication;
@@ -28,6 +27,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 public class AgentProfileServiceImpl implements AgentProfileService {
@@ -93,26 +94,27 @@ public class AgentProfileServiceImpl implements AgentProfileService {
         UserCredentialsEntity userCredentials = repository.findByUsername(authentication.getName())
                 .orElseThrow(() -> new UserNotFoundException(messageSource.getMessage("user_not_found", null, LocaleContextHolder.getLocale())));
 
-        if (Objects.isNull(request)) throw new NullPointerException();
+        if (Objects.isNull(request)) throw new NullPointerException(new NullPointerException().getLocalizedMessage());
 
         UserInfoEntity entity = manager.find(UserInfoEntity.class, userCredentials.getUserInfoEntity().getId());
 
         List<SuperVisorProfileRequest> list = superVisorProfileService.getAll();
 
-        List<SuperVisorProfileRequest> updateList = list.stream().filter(o -> o.getEmail().equals(request.getEmail()) || o.getUsername().equals(request.getUsername()) || o.getPhoneNumber().equals(request.getPhoneNumber())).toList();
+        List<SuperVisorProfileRequest> updateList = list.stream()
+                .filter(o -> o.getEmail().equals(request.getEmail()) || o.getUsername().equals(request.getUsername()) || o.getPhoneNumber().equals(request.getPhoneNumber()))
+                .filter(o -> !o.getUsername().equals(entity.getUserCredentials().getUsername()) || !o.getEmail().equals(entity.getEmail()) || !o.getPhoneNumber().equals(entity.getPhoneNumber()))
+                .toList();
 
-        if (entity.getPhoneNumber().equals(request.getPhoneNumber())) {
-            throw new PhoneNumberIsAlreadyBusyException(messageSource.getMessage("phone_number_is_already_exists", null, LocaleContextHolder.getLocale()));
-        }
-        if (entity.getEmail().equals(request.getEmail())) {
-            throw new EmailIsAlreadyBusyException(messageSource.getMessage("email_is_already_busy", null, LocaleContextHolder.getLocale()));
-        }
-
-        if (!updateList.isEmpty())
+        System.out.println(updateList);
+        if (!updateList.isEmpty()) {
             throw new UniqueConstraintException(messageSource.getMessage("unique_constraint", null, LocaleContextHolder.getLocale()));
-
-
-        entity.setEmail(request.getEmail());
+        }
+        if(!entity.getEmail().equals(request.getEmail())) {
+            entity.setEmail(request.getEmail());
+        }
+        if(!entity.getPhoneNumber().equals(request.getPhoneNumber())) {
+            entity.setPhoneNumber(request.getPhoneNumber());
+        }
         entity.setName(request.getName());
         entity.setBirthDate(request.getBirthDate());
         entity.setPhoneNumber(request.getPhoneNumber());
@@ -123,6 +125,7 @@ public class AgentProfileServiceImpl implements AgentProfileService {
             feignClient.updateUsername(header, lang, request.getUsername());
             authenticationService.revokeAllUserTokens(entity);
         }
+        authenticationService.revokeAllUserTokens(entity);
         SecurityContextHolder.clearContext();
         return UpdateResponse.builder()
                 .isUpdated(true).build();
@@ -135,16 +138,17 @@ public class AgentProfileServiceImpl implements AgentProfileService {
         UserCredentialsEntity entity = repository.findByUsername(contextHolder.getName()).get();
         if (encoder.matches(request.getCurrentPassword(), entity.getHash())) {
             if (Objects.equals(request.getNewPassword(), request.getRepeatNewPassword())) {
+                if (Objects.equals(request.getCurrentPassword(), request.getNewPassword())) {
+                    throw new IdenticalPasswordsException(messageSource.getMessage("identical_passwords", null, LocaleContextHolder.getLocale()));
+                }
                 entity.setHash(encoder.encode(request.getNewPassword()));
-
+                authenticationService.revokeAllUserTokens(entity.getUserInfoEntity());
                 SecurityContextHolder.clearContext();
                 return UpdateResponse.builder()
                         .isUpdated(true).build();
             }
+            throw new IncorrectPasswordException(messageSource.getMessage("incorrect_password", null, LocaleContextHolder.getLocale()));
         }
-        return UpdateResponse.builder()
-                .isUpdated(false).build();
+        throw new IncorrectPasswordException(messageSource.getMessage("incorrect_password", null, LocaleContextHolder.getLocale()));
     }
-
-
 }

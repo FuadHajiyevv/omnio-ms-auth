@@ -71,6 +71,11 @@ public class SuperVisorProfileServiceImpl implements SuperVisorProfileService {
                         "user_not_found", null, LocaleContextHolder.getLocale()
                 )
         ));
+    String name = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        if(name.equals(user.getUserCredentials().getUsername())){
+            throw new RequestToHimselfException(messageSource.getMessage("request_himself",null,LocaleContextHolder.getLocale()));
+        }
         repository.deleteById(id);
 
         feignClient.deleteUser(header, lang,user.getUserCredentials().getUsername());

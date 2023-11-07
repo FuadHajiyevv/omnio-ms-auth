@@ -85,22 +85,20 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ResponseEntity<CustomExceptionResponse> userAlreadyExists(UserAlreadyExistsException exception) {
-        return ResponseEntity.badRequest().body(
+        return new ResponseEntity<>(
                 CustomExceptionResponse.builder()
                         .status(HttpStatus.CONFLICT.value())
                         .reason(exception.getLocalizedMessage())
-                        .build()
-        );
+                        .build(), HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(RoleAlreadyExistsException.class)
     public ResponseEntity<CustomExceptionResponse> roleAlreadyExists(RoleAlreadyExistsException exception) {
-        return ResponseEntity.badRequest().body(
+        return new ResponseEntity<>(
                 CustomExceptionResponse.builder()
                         .status(HttpStatus.CONFLICT.value())
                         .reason(exception.getLocalizedMessage())
-                        .build()
-        );
+                        .build(), HttpStatus.CONFLICT);
     }
 
 
@@ -175,6 +173,26 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(SameUserException.class)
     public ResponseEntity<CustomExceptionResponse> unqiueConstraint(SameUserException exception) {
+        return new ResponseEntity<>(
+                CustomExceptionResponse.builder()
+                        .status(HttpStatus.BAD_REQUEST.value())
+                        .reason(exception.getLocalizedMessage())
+                        .build(), HttpStatus.BAD_REQUEST
+        );
+    }
+
+    @ExceptionHandler(IncorrectPasswordException.class)
+    public ResponseEntity<CustomExceptionResponse> incorrectPassword(IncorrectPasswordException exception) {
+        return new ResponseEntity<>(
+                CustomExceptionResponse.builder()
+                        .status(HttpStatus.BAD_REQUEST.value())
+                        .reason(exception.getLocalizedMessage())
+                        .build(), HttpStatus.BAD_REQUEST
+        );
+    }
+
+    @ExceptionHandler(IdenticalPasswordsException.class)
+    public ResponseEntity<CustomExceptionResponse> identicalPasswords(IdenticalPasswordsException exception) {
         return new ResponseEntity<>(
                 CustomExceptionResponse.builder()
                         .status(HttpStatus.BAD_REQUEST.value())
