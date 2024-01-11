@@ -1,11 +1,11 @@
 server:
-  port: ${SERVER_PORT}
+  port: 8085
   servlet:
     context-path: /omnio
 spring:
   datasource:
-    username: ${DATABASE_USERNAME}
-    password: ${DATABASE_PASSWORD}
+    username: postgres
+    password: postgres
     url: jdbc:postgresql://${HOST}:${PORT}/${DATABASE_NAME}
     driver-class-name: org.postgresql.Driver
   jpa:

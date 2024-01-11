@@ -1,0 +1,19 @@
+version: "2.28"
+services:
+  omnio-ms-auth:
+    image: eclipse-temurin:17.0.8_7-jdk
+    container_name: omnio-messaging
+    ports:
+      - 8080:8080
+    networks:
+      - host
+
+
+
+networks:
+  default:
+    external: true
+    name: host
+
+
+
